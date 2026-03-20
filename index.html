@@ -1,3 +1,7 @@
+<!-- Cloudflare Web Analytics --><script defer src='https://static.cloudflareinsights.com/beacon.min.js' data-cf-beacon='{"token": "28a5f7c0617a4f8aab97e95c1ea3e1b7"}'></script><!-- End Cloudflare Web Analytics -->
+<!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-WFQQ172YYK"></script>
+
 <!DOCTYPE html>
 <html lang="zh-Hant">
 <head>
@@ -486,6 +490,69 @@
       font-size: 1.1rem;
     }
 
+    .floating-link {
+      position: fixed;
+      bottom: 18px;
+      z-index: 20;
+    }
+
+    .floating-link.left {
+      left: 18px;
+    }
+
+    .floating-link.right {
+      right: 18px;
+    }
+
+    .nav-link {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-width: 168px;
+      padding: 14px 20px;
+      border-radius: 999px;
+      text-decoration: none;
+      font-weight: 800;
+      font-size: 1.02rem;
+      color: #143f52;
+      border: 1.5px solid rgba(255, 255, 255, 0.55);
+      backdrop-filter: blur(14px);
+      -webkit-backdrop-filter: blur(14px);
+      box-shadow: 0 12px 24px rgba(59, 167, 255, 0.12);
+      transition: transform 0.2s ease, box-shadow 0.2s ease, background 0.2s ease;
+    }
+
+    .nav-link:hover,
+    .nav-link:focus-visible {
+      transform: translateY(-2px);
+      box-shadow: 0 14px 24px rgba(59, 167, 255, 0.22);
+      outline: none;
+    }
+
+    .nav-link.nav-home {
+      color: #0f5c58;
+      background: linear-gradient(135deg, rgba(255,255,255,0.68), rgba(216,255,241,0.58) 55%, rgba(174,240,210,0.5));
+      box-shadow: 0 14px 28px rgba(24, 143, 104, 0.16);
+    }
+
+    .nav-link.nav-home:hover,
+    .nav-link.nav-home:focus-visible {
+      background: linear-gradient(135deg, rgba(255,255,255,0.76), rgba(216,255,241,0.68) 55%, rgba(174,240,210,0.62));
+      box-shadow: 0 18px 30px rgba(24, 143, 104, 0.22);
+    }
+
+    .nav-link.nav-top {
+      color: #5a2f86;
+      background: linear-gradient(135deg, rgba(252,247,255,0.76), rgba(226,215,255,0.62) 55%, rgba(197,223,255,0.52));
+      box-shadow: 0 14px 28px rgba(116, 112, 255, 0.18);
+    }
+
+    .nav-link.nav-top:hover,
+    .nav-link.nav-top:focus-visible {
+      background: linear-gradient(135deg, rgba(252,247,255,0.84), rgba(226,215,255,0.72) 55%, rgba(197,223,255,0.64));
+      box-shadow: 0 18px 30px rgba(116, 112, 255, 0.24);
+    }
+
     @media (max-width: 860px) {
       .picture-grid,
       .qa-grid,
@@ -526,11 +593,23 @@
       .sight-grid {
         grid-template-columns: 1fr;
       }
+
+      .floating-link {
+        bottom: 12px;
+      }
+
+      .floating-link.left {
+        left: 12px;
+      }
+
+      .floating-link.right {
+        right: 12px;
+      }
     }
   </style>
 </head>
 <body>
-  <main class="page">
+  <main class="page" id="top">
     <header class="hero">
       <div class="eyebrow">🌱 TalkBetter English Time</div>
       <h1>TalkBetter WEEK 6</h1>
@@ -716,6 +795,9 @@
       TalkBetter WEEK 6 • Learn, read, and grow together.
     </footer>
   </main>
+
+  <a class="nav-link nav-home floating-link left" href="https://talkbetter.github.io/D/">← 回導覽頁</a>
+  <a class="nav-link nav-top floating-link right" href="#top" onclick="window.scrollTo({ top: 0, behavior: 'smooth' }); return false;">↑ 回到上方</a>
 
   <script>
     const audioSources = {
