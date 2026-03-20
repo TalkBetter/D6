@@ -1,0 +1,918 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>TalkBetter WEEK 6</title>
+  <style>
+    :root {
+      --sky: #dff2ff;
+      --blue: #3ba7ff;
+      --green: #72d39a;
+      --leaf: #168f68;
+      --yellow: #ffd86b;
+      --pink: #ff8db3;
+      --peach: #ffb86f;
+      --cream: #fffef8;
+      --ink: #183642;
+      --soft-ink: #4b6672;
+      --white: rgba(255, 255, 255, 0.9);
+      --shadow: 0 20px 44px rgba(34, 94, 122, 0.14);
+      --radius-xl: 28px;
+      --radius-lg: 22px;
+      --radius-md: 18px;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      margin: 0;
+      font-family: "Trebuchet MS", "Noto Sans TC", "Microsoft JhengHei", sans-serif;
+      color: var(--ink);
+      background:
+        radial-gradient(circle at top left, rgba(255, 255, 255, 0.82), transparent 30%),
+        radial-gradient(circle at top right, rgba(255, 208, 148, 0.5), transparent 28%),
+        linear-gradient(180deg, #c8eeff 0%, #eef8ff 24%, #f3fff6 58%, #fff3dd 100%);
+      min-height: 100vh;
+      line-height: 1.75;
+      font-size: 21px;
+    }
+
+    body::before,
+    body::after {
+      content: "";
+      position: fixed;
+      inset: auto;
+      width: 240px;
+      height: 240px;
+      border-radius: 50%;
+      filter: blur(10px);
+      opacity: 0.35;
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    body::before {
+      top: 80px;
+      left: -60px;
+      background: var(--pink);
+    }
+
+    body::after {
+      bottom: 30px;
+      right: -50px;
+      background: var(--yellow);
+    }
+
+    .page {
+      position: relative;
+      z-index: 1;
+      width: min(1180px, calc(100% - 28px));
+      margin: 0 auto;
+      padding: 28px 0 56px;
+    }
+
+    .hero {
+      position: relative;
+      overflow: hidden;
+      background: linear-gradient(135deg, rgba(255,255,255,0.95), rgba(227,246,255,0.9) 50%, rgba(255,241,214,0.94));
+      border: 3px solid rgba(255, 255, 255, 0.65);
+      box-shadow: var(--shadow);
+      border-radius: 32px;
+      padding: 20px 18px 16px;
+      margin-bottom: 18px;
+      text-align: center;
+    }
+
+    .hero::before,
+    .hero::after {
+      content: "";
+      position: absolute;
+      border-radius: 999px;
+      opacity: 0.6;
+    }
+
+    .hero::before {
+      width: 220px;
+      height: 220px;
+      top: -90px;
+      right: -60px;
+      background: radial-gradient(circle, var(--pink), transparent 68%);
+    }
+
+    .hero::after {
+      width: 240px;
+      height: 240px;
+      bottom: -120px;
+      left: -50px;
+      background: radial-gradient(circle, var(--green), transparent 68%);
+    }
+
+    .eyebrow {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 6px 11px;
+      border-radius: 999px;
+      background: rgba(143, 214, 148, 0.28);
+      color: var(--leaf);
+      font-weight: 700;
+      letter-spacing: 0.04em;
+      font-size: 0.88rem;
+    }
+
+    h1 {
+      margin: 10px 0 4px;
+      font-size: clamp(1.68rem, 3.5vw, 2.55rem);
+      line-height: 1.1;
+    }
+
+    .subtitle {
+      margin: 0;
+      font-size: clamp(0.9rem, 1.35vw, 1.08rem);
+      color: var(--soft-ink);
+      font-weight: 700;
+    }
+
+    .cheer {
+      margin: 0;
+      max-width: 720px;
+      color: var(--soft-ink);
+      font-size: 1.08rem;
+    }
+
+    .button-row {
+      display: flex;
+      justify-content: center;
+      gap: 14px;
+      flex-wrap: wrap;
+      margin-top: 12px;
+    }
+
+    .audio-btn {
+      border: 0;
+      border-radius: 999px;
+      padding: 13px 20px;
+      min-width: 164px;
+      font-size: 1.08rem;
+      font-weight: 800;
+      color: #143f52;
+      background: linear-gradient(135deg, #ffffff, #ffe07f);
+      box-shadow: 0 12px 22px rgba(255, 165, 56, 0.2);
+      cursor: pointer;
+      transition: transform 0.2s ease, box-shadow 0.2s ease, filter 0.2s ease;
+    }
+
+    .audio-btn:hover,
+    .audio-btn:focus-visible {
+      transform: translateY(-2px) scale(1.01);
+      box-shadow: 0 14px 24px rgba(220, 178, 72, 0.28);
+      outline: none;
+    }
+
+    .audio-btn:active {
+      transform: translateY(0);
+    }
+
+    .audio-btn.playing {
+      color: #fff;
+      background: linear-gradient(135deg, #11b98f, #46b8ff);
+      box-shadow: 0 0 0 6px rgba(70, 184, 255, 0.18), 0 18px 30px rgba(34, 115, 144, 0.28);
+      animation: pulse 1.2s infinite;
+    }
+
+    .audio-btn.loading {
+      filter: saturate(0.85);
+    }
+
+    @keyframes pulse {
+      0% { transform: scale(1); }
+      50% { transform: scale(1.03); }
+      100% { transform: scale(1); }
+    }
+
+    .status {
+      min-height: 1.5em;
+      margin-top: 8px;
+      font-size: 1.02rem;
+      color: var(--soft-ink);
+      font-weight: 600;
+    }
+
+    .section-card {
+      position: relative;
+      overflow: hidden;
+      background: var(--white);
+      backdrop-filter: blur(8px);
+      border: 2px solid rgba(255,255,255,0.75);
+      box-shadow: var(--shadow);
+      border-radius: var(--radius-xl);
+      padding: 28px 22px 24px;
+      margin-bottom: 22px;
+    }
+
+    .section-card::before {
+      content: "";
+      position: absolute;
+      inset: 0 auto auto 0;
+      width: 100%;
+      height: 8px;
+      background: linear-gradient(90deg, var(--green), var(--yellow), var(--pink), var(--blue));
+    }
+
+    .section-head {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 12px;
+      flex-wrap: wrap;
+      margin-bottom: 18px;
+      padding-top: 8px;
+    }
+
+    .section-title-wrap h2 {
+      margin: 0;
+      font-size: clamp(1.75rem, 3vw, 2.3rem);
+    }
+
+    .section-title-wrap p {
+      margin: 6px 0 0;
+      color: var(--soft-ink);
+      font-weight: 700;
+      font-size: 1.18rem;
+    }
+
+    .icon-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 7px 12px;
+      border-radius: 999px;
+      background: rgba(255, 255, 255, 0.72);
+      font-weight: 900;
+      color: var(--leaf);
+    }
+
+    .sight-grid,
+    .picture-grid,
+    .qa-grid,
+    .adjective-grid {
+      display: grid;
+      gap: 16px;
+    }
+
+    .sight-grid {
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 8px 14px;
+    }
+
+    .compact-card {
+      padding: 8px 6px 8px 0;
+      border-radius: 0;
+      background: transparent;
+      border: 0;
+      box-shadow: none;
+    }
+
+    .picture-grid,
+    .qa-grid {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+    .adjective-grid {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      margin-top: 16px;
+    }
+
+    .mini-card,
+    .sentence-card,
+    .qa-card,
+    .focus-card,
+    .practice-box,
+    .reading-block {
+      border-radius: var(--radius-lg);
+      padding: 18px;
+      background: linear-gradient(180deg, rgba(255,255,255,0.97), rgba(245,251,255,0.95));
+      border: 2px solid rgba(166, 223, 255, 0.7);
+    }
+
+    .mini-card:nth-child(3n + 1) {
+      background: linear-gradient(180deg, rgba(255,250,236,0.97), rgba(255,236,183,0.95));
+    }
+
+    .mini-card:nth-child(3n + 2) {
+      background: linear-gradient(180deg, rgba(242,255,246,0.97), rgba(207,247,223,0.95));
+    }
+
+    .mini-card:nth-child(3n + 3) {
+      background: linear-gradient(180deg, rgba(249,244,255,0.97), rgba(224,242,255,0.95));
+    }
+
+    .word-line {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 6px;
+      font-weight: 800;
+    }
+
+    .word-index {
+      flex: 0 0 auto;
+      display: inline-grid;
+      place-items: center;
+      width: 34px;
+      height: 34px;
+      border-radius: 50%;
+      background: rgba(255,255,255,0.8);
+      color: var(--leaf);
+      font-size: 0.92rem;
+      box-shadow: inset 0 0 0 2px rgba(79, 157, 105, 0.18);
+    }
+
+    .word {
+      font-size: 1.38rem;
+      color: #22536b;
+      letter-spacing: 0.02em;
+    }
+
+    .en {
+      margin: 0 0 6px;
+      font-size: 1.16rem;
+      font-weight: 700;
+      line-height: 1.45;
+    }
+
+    .zh {
+      margin: 0;
+      font-size: 1.06rem;
+      line-height: 1.45;
+      color: var(--soft-ink);
+    }
+
+    #part1 .section-head {
+      margin-bottom: 14px;
+    }
+
+    #part1 {
+      padding-bottom: 18px;
+    }
+
+    #part1 .sight-grid {
+      align-items: start;
+    }
+
+    #part1 .mini-card:nth-child(3n + 1),
+    #part1 .mini-card:nth-child(3n + 2),
+    #part1 .mini-card:nth-child(3n + 3) {
+      background: transparent;
+    }
+
+    #part1 .mini-card {
+      position: relative;
+    }
+
+    #part1 .mini-card::after {
+      content: "";
+      position: absolute;
+      left: 0;
+      right: 6px;
+      bottom: 0;
+      border-bottom: 1px dashed rgba(24, 143, 104, 0.16);
+    }
+
+    .picture-zone {
+      position: relative;
+      overflow: hidden;
+      background:
+        radial-gradient(circle at 15% 20%, rgba(255,255,255,0.75), transparent 20%),
+        radial-gradient(circle at 85% 25%, rgba(255, 180, 208, 0.34), transparent 24%),
+        linear-gradient(180deg, rgba(232,255,242,0.95), rgba(255,244,210,0.95));
+      border-radius: var(--radius-xl);
+      padding: 18px;
+    }
+
+    .picture-zone::after {
+      content: "🌼  🍃  🌷";
+      position: absolute;
+      right: 16px;
+      bottom: 10px;
+      font-size: 1.5rem;
+      opacity: 0.65;
+    }
+
+    .reading-title {
+      margin: 0 0 14px;
+      text-align: center;
+      font-size: clamp(1.8rem, 3.2vw, 2.35rem);
+    }
+
+    .reading-block {
+      margin-bottom: 12px;
+      background: linear-gradient(180deg, rgba(239,255,244,0.98), rgba(255,255,255,0.95));
+      border-color: rgba(143, 214, 148, 0.5);
+    }
+
+    .reading-block .en {
+      font-size: 1.28rem;
+    }
+
+    .qa-card {
+      background: linear-gradient(180deg, rgba(230,247,255,0.98), rgba(255,255,255,0.95));
+    }
+
+    .qa-label {
+      margin: 0 0 6px;
+      font-size: 1.12rem;
+      font-weight: 900;
+      color: #27627d;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+
+    .answer {
+      margin-top: 12px;
+      padding-top: 12px;
+      border-top: 2px dashed rgba(102, 185, 232, 0.35);
+    }
+
+    .video-shell {
+      overflow: hidden;
+      border-radius: 24px;
+      box-shadow: 0 16px 30px rgba(70, 110, 125, 0.18);
+      background: #d2f2ff;
+      border: 3px solid rgba(255,255,255,0.75);
+    }
+
+    .video-shell iframe {
+      display: block;
+      width: 100%;
+      aspect-ratio: 16 / 9;
+      border: 0;
+    }
+
+    .focus-card {
+      background: linear-gradient(180deg, rgba(255,245,212,0.97), rgba(255,255,255,0.94));
+    }
+
+    .practice-box {
+      margin-top: 18px;
+      background: linear-gradient(180deg, rgba(255,228,239,0.97), rgba(255,255,255,0.95));
+      border-style: dashed;
+      border-color: rgba(255, 130, 170, 0.5);
+    }
+
+    .practice-lines {
+      display: grid;
+      gap: 10px;
+      margin-top: 12px;
+    }
+
+    .practice-line {
+      height: 18px;
+      border-bottom: 2px dashed rgba(81, 107, 118, 0.28);
+    }
+
+    footer {
+      text-align: center;
+      color: var(--soft-ink);
+      padding-top: 6px;
+      font-weight: 700;
+      font-size: 1.1rem;
+    }
+
+    @media (max-width: 860px) {
+      .picture-grid,
+      .qa-grid,
+      .adjective-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .sight-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 8px 12px;
+      }
+    }
+
+    @media (max-width: 640px) {
+      .page {
+        width: min(100% - 16px, 1180px);
+        padding-top: 16px;
+      }
+
+      .hero {
+        padding: 18px 14px 14px;
+        border-radius: 26px;
+      }
+
+      .section-card {
+        padding: 22px 16px 20px;
+        border-radius: 24px;
+      }
+
+      .audio-btn {
+        width: 100%;
+      }
+
+      .button-row {
+        flex-direction: column;
+      }
+
+      .sight-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+</head>
+<body>
+  <main class="page">
+    <header class="hero">
+      <div class="eyebrow">🌱 TalkBetter English Time</div>
+      <h1>TalkBetter WEEK 6</h1>
+      <p class="subtitle">Words, Plants, and Adjectives</p>
+      <div class="button-row">
+        <button class="audio-btn" id="play-all-btn" type="button">▶ 播放全部 MP3</button>
+      </div>
+      <div class="status" id="global-status" aria-live="polite">Ready to learn. 準備開始學習。</div>
+    </header>
+
+    <section class="section-card" id="part1">
+      <div class="section-head">
+        <div class="section-title-wrap">
+          <div class="icon-badge">📘 Part 1</div>
+          <h2>Part 1: Sight Words</h2>
+          <p>Sight Words Sentences 常見字句型練習</p>
+        </div>
+        <button class="audio-btn part-btn" type="button" data-part="part1">▶ 播放 Part 1 MP3</button>
+      </div>
+
+      <div class="sight-grid">
+        <article class="mini-card compact-card"><div class="word-line"><span class="word-index">1</span><span class="word">any</span></div><p class="en">Do you have any pencils?</p><p class="zh">你有任何鉛筆嗎？</p></article>
+        <article class="mini-card compact-card"><div class="word-line"><span class="word-index">2</span><span class="word">look</span></div><p class="en">Look at the bird in the tree.</p><p class="zh">看樹上的小鳥。</p></article>
+        <article class="mini-card compact-card"><div class="word-line"><span class="word-index">3</span><span class="word">new</span></div><p class="en">I have a new bag for school.</p><p class="zh">我有一個新的書包要帶去學校。</p></article>
+        <article class="mini-card compact-card"><div class="word-line"><span class="word-index">4</span><span class="word">our</span></div><p class="en">Our teacher is very kind.</p><p class="zh">我們的老師很親切。</p></article>
+        <article class="mini-card compact-card"><div class="word-line"><span class="word-index">5</span><span class="word">does</span></div><p class="en">She does her homework every day.</p><p class="zh">她每天都做功課。</p></article>
+        <article class="mini-card compact-card"><div class="word-line"><span class="word-index">6</span><span class="word">just</span></div><p class="en">I just ate my lunch.</p><p class="zh">我剛剛吃完午餐。</p></article>
+        <article class="mini-card compact-card"><div class="word-line"><span class="word-index">7</span><span class="word">now</span></div><p class="en">We are reading a book now.</p><p class="zh">我們現在正在看書。</p></article>
+        <article class="mini-card compact-card"><div class="word-line"><span class="word-index">8</span><span class="word">their</span></div><p class="en">Their classroom is very clean.</p><p class="zh">他們的教室很乾淨。</p></article>
+        <article class="mini-card compact-card"><div class="word-line"><span class="word-index">9</span><span class="word">down</span></div><p class="en">Please sit down on the chair.</p><p class="zh">請坐在椅子上。</p></article>
+        <article class="mini-card compact-card"><div class="word-line"><span class="word-index">10</span><span class="word">school</span></div><p class="en">I go to school by bus.</p><p class="zh">我搭公車去上學。</p></article>
+        <article class="mini-card compact-card"><div class="word-line"><span class="word-index">11</span><span class="word">get</span></div><p class="en">I get a sticker from my teacher.</p><p class="zh">我從老師那裡拿到一張貼紙。</p></article>
+        <article class="mini-card compact-card"><div class="word-line"><span class="word-index">12</span><span class="word">than</span></div><p class="en">My brother is taller than me.</p><p class="zh">我哥哥比我高。</p></article>
+        <article class="mini-card compact-card"><div class="word-line"><span class="word-index">13</span><span class="word">got</span></div><p class="en">I got a gift on my birthday.</p><p class="zh">我在生日時收到一個禮物。</p></article>
+        <article class="mini-card compact-card"><div class="word-line"><span class="word-index">14</span><span class="word">him</span></div><p class="en">I can help him carry the box.</p><p class="zh">我可以幫他搬箱子。</p></article>
+        <article class="mini-card compact-card"><div class="word-line"><span class="word-index">15</span><span class="word">second</span></div><p class="en">I am second in line.</p><p class="zh">我是排隊的第二個。</p></article>
+        <article class="mini-card compact-card"><div class="word-line"><span class="word-index">16</span><span class="word">them</span></div><p class="en">I see the ducks and feed them.</p><p class="zh">我看到鴨子並餵牠們。</p></article>
+        <article class="mini-card compact-card"><div class="word-line"><span class="word-index">17</span><span class="word">out</span></div><p class="en">Please take your book out.</p><p class="zh">請把你的書拿出來。</p></article>
+        <article class="mini-card compact-card"><div class="word-line"><span class="word-index">18</span><span class="word">her</span></div><p class="en">I give her a flower.</p><p class="zh">我送她一朵花。</p></article>
+      </div>
+    </section>
+
+    <section class="section-card" id="part2">
+      <div class="section-head">
+        <div class="section-title-wrap">
+          <div class="icon-badge">🌼 Part 2</div>
+          <h2>Part 2: Picture Sentences</h2>
+          <p>看圖說句子，用英文描述花朵與葉子。</p>
+        </div>
+        <button class="audio-btn part-btn" type="button" data-part="part2">▶ 播放 Part 2 MP3</button>
+      </div>
+
+      <div class="picture-zone">
+        <div class="picture-grid">
+          <article class="sentence-card"><p class="en">The flowers are red, yellow, and pink.</p><p class="zh">花是紅色、黃色和粉紅色的。</p></article>
+          <article class="sentence-card"><p class="en">The leaves are green.</p><p class="zh">葉子是綠色的。</p></article>
+          <article class="sentence-card"><p class="en">Some flowers are big.</p><p class="zh">有些花很大。</p></article>
+          <article class="sentence-card"><p class="en">Some leaves are small.</p><p class="zh">有些葉子很小。</p></article>
+          <article class="sentence-card"><p class="en">The picture is beautiful.</p><p class="zh">這張圖很漂亮。</p></article>
+        </div>
+      </div>
+    </section>
+
+    <section class="section-card" id="part3">
+      <div class="section-head">
+        <div class="section-title-wrap">
+          <div class="icon-badge">📖 Part 3</div>
+          <h2>Part 3: Reading Time</h2>
+          <p>Reading Passage + Questions and Answers 閱讀與問答</p>
+        </div>
+        <button class="audio-btn part-btn" type="button" data-part="part3">▶ 播放 Part 3 MP3</button>
+      </div>
+
+      <h3 class="reading-title">Plants ~ Natures Helpers<br><span style="font-size:0.75em;color:var(--soft-ink);font-weight:700;">植物～大自然的小幫手</span></h3>
+
+      <article class="reading-block"><p class="en">Plants are wonderful living things!</p><p class="zh">植物是很棒的生物！</p></article>
+      <article class="reading-block"><p class="en">They come in many shapes and sizes, from tiny flowers to tall trees.</p><p class="zh">它們有很多不同的形狀和大小，從小小的花到高高的樹都有。</p></article>
+      <article class="reading-block"><p class="en">Plants grow in soil and need sunlight, water, and air to be healthy.</p><p class="zh">植物生長在土裡，並且需要陽光、水和空氣才能健康成長。</p></article>
+      <article class="reading-block"><p class="en">Plants make their food using sunlight.</p><p class="zh">植物利用陽光製造自己的食物。</p></article>
+      <article class="reading-block"><p class="en">This helps them grow strong and healthy.</p><p class="zh">這幫助它們長得強壯又健康。</p></article>
+      <article class="reading-block"><p class="en">Some plants make fruits and seeds.</p><p class="zh">有些植物會長出水果和種子。</p></article>
+      <article class="reading-block"><p class="en">When animals eat the fruit, they help spread the seeds so new plants can grow.</p><p class="zh">當動物吃水果時，牠們也會幫忙散播種子，讓新的植物長出來。</p></article>
+      <article class="reading-block"><p class="en">Some, like flowers, attract bees and butterflies, which help them grow.</p><p class="zh">有些植物，像花朵，會吸引蜜蜂和蝴蝶，而牠們也會幫助植物生長。</p></article>
+      <article class="reading-block"><p class="en">Plants are important for our world.</p><p class="zh">植物對我們的世界很重要。</p></article>
+      <article class="reading-block"><p class="en">They provide homes for animals, help clean the air, and make Earth more beautiful.</p><p class="zh">它們為動物提供家園、幫助清淨空氣，並讓地球更美麗。</p></article>
+
+      <div class="section-head" style="margin-top:20px;">
+        <div class="section-title-wrap">
+          <div class="icon-badge">❓ Q&amp;A</div>
+          <h2 style="font-size:1.45rem;">Questions and Answers</h2>
+          <p>讀完文章後，試著回答問題。</p>
+        </div>
+        <button class="audio-btn part-btn" type="button" data-part="part3qa">▶ 播放 Part 3 Q&amp;A MP3</button>
+      </div>
+
+      <div class="qa-grid">
+        <article class="qa-card">
+          <p class="qa-label">Question 1</p>
+          <p class="en">What do plants need to be healthy?</p>
+          <p class="zh">植物需要什麼才能健康成長？</p>
+          <div class="answer">
+            <p class="qa-label">Answer</p>
+            <p class="en">Plants need sunlight, water, and air to be healthy.</p>
+            <p class="zh">植物需要陽光、水和空氣才能健康成長。</p>
+          </div>
+        </article>
+        <article class="qa-card">
+          <p class="qa-label">Question 2</p>
+          <p class="en">What do plants use to make food?</p>
+          <p class="zh">植物用什麼來製造食物？</p>
+          <div class="answer">
+            <p class="qa-label">Answer</p>
+            <p class="en">Plants use sunlight to make food.</p>
+            <p class="zh">植物利用陽光來製造食物。</p>
+          </div>
+        </article>
+        <article class="qa-card">
+          <p class="qa-label">Question 3</p>
+          <p class="en">Why is it important for animals to eat fruit from plants?</p>
+          <p class="zh">為什麼動物吃植物的果實很重要？</p>
+          <div class="answer">
+            <p class="qa-label">Answer</p>
+            <p class="en">It is important because animals help spread the seeds so new plants can grow.</p>
+            <p class="zh">這很重要，因為動物會幫忙散播種子，讓新的植物長出來。</p>
+          </div>
+        </article>
+        <article class="qa-card">
+          <p class="qa-label">Question 4</p>
+          <p class="en">How do plants help the world?</p>
+          <p class="zh">植物如何幫助這個世界？</p>
+          <div class="answer">
+            <p class="qa-label">Answer</p>
+            <p class="en">Plants help the world by providing homes for animals and helping clean the air.</p>
+            <p class="zh">植物藉由提供動物棲息的家園以及幫助淨化空氣來幫助這個世界。</p>
+          </div>
+        </article>
+      </div>
+    </section>
+
+    <section class="section-card" id="part4">
+      <div class="section-head">
+        <div class="section-title-wrap">
+          <div class="icon-badge">🎬 Part 4</div>
+          <h2>Part 4: Video Learning</h2>
+          <p>Adjectives 形容詞影片教學</p>
+        </div>
+      </div>
+
+      <div class="video-shell">
+        <iframe
+          src="https://www.youtube.com/embed/YE234THxLTE?si=shared"
+          title="Adjectives Video"
+          loading="lazy"
+          allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+          referrerpolicy="strict-origin-when-cross-origin"
+          allowfullscreen></iframe>
+      </div>
+
+      <div class="adjective-grid">
+        <article class="focus-card"><p class="en">Adjectives describe a noun.</p><p class="zh">形容詞用來描述名詞。</p></article>
+        <article class="focus-card"><p class="en">They tell us what something looks like.</p><p class="zh">它們告訴我們某樣東西看起來怎麼樣。</p></article>
+        <article class="focus-card"><p class="en">They tell us what something feels like.</p><p class="zh">它們告訴我們某樣東西摸起來怎麼樣。</p></article>
+        <article class="focus-card"><p class="en">They tell us what something sounds like.</p><p class="zh">它們告訴我們某樣東西聽起來怎麼樣。</p></article>
+        <article class="focus-card"><p class="en">They tell us what something smells like.</p><p class="zh">它們告訴我們某樣東西聞起來怎麼樣。</p></article>
+        <article class="focus-card"><p class="en">They tell us what something tastes like.</p><p class="zh">它們告訴我們某樣東西吃起來怎麼樣。</p></article>
+        <article class="focus-card" style="grid-column: 1 / -1;"><p class="en">Adjectives make writing more interesting.</p><p class="zh">形容詞會讓寫作更有趣、更生動。</p></article>
+      </div>
+
+      <div class="practice-box">
+        <p class="en" style="margin-bottom:6px;">Now its your turn!</p>
+        <p class="zh">現在輪到你了！</p>
+        <p class="en" style="margin-top:14px;margin-bottom:0;">Write your own sentences.</p>
+        <p class="zh">寫出你自己的句子吧。</p>
+        <div class="practice-lines" aria-hidden="true">
+          <div class="practice-line"></div>
+          <div class="practice-line"></div>
+          <div class="practice-line"></div>
+        </div>
+      </div>
+    </section>
+
+    <footer>
+      TalkBetter WEEK 6 • Learn, read, and grow together.
+    </footer>
+  </main>
+
+  <script>
+    const audioSources = {
+      part1: "mp3/part1.mp3",
+      part2: "mp3/part2.mp3",
+      part3: "mp3/part3.mp3",
+      part3qa: "mp3/part3-qa.mp3"
+    };
+
+    const audioMap = Object.fromEntries(
+      Object.entries(audioSources).map(([part, src]) => {
+        const audio = new Audio(src);
+        audio.preload = "none";
+        return [part, audio];
+      })
+    );
+
+    const partButtons = Object.fromEntries(
+      Array.from(document.querySelectorAll(".part-btn")).map((button) => [button.dataset.part, button])
+    );
+
+    const playAllButton = document.getElementById("play-all-btn");
+    const globalStatus = document.getElementById("global-status");
+
+    let activePart = null;
+    let isPlayingAll = false;
+    let playAllToken = 0;
+
+    function setStatus(message) {
+      globalStatus.textContent = message;
+    }
+
+    function setButtonState(button, state, idleText, playingText) {
+      if (!button) return;
+      button.classList.toggle("playing", state === "playing");
+      button.classList.toggle("loading", state === "loading");
+      button.textContent = state === "playing" ? playingText : idleText;
+    }
+
+    function refreshButtons() {
+      Object.entries(partButtons).forEach(([part, button]) => {
+        const isActive = activePart === part && !audioMap[part].paused;
+        setButtonState(button, isActive ? "playing" : "idle", `▶ 播放 ${part.replace("part", "Part ")} MP3`, `⏸ 暫停 ${part.replace("part", "Part ")} MP3`);
+      });
+
+      const allPlaying = isPlayingAll;
+      setButtonState(playAllButton, allPlaying ? "playing" : "idle", "▶ 播放全部 MP3", "⏹ 停止全部 MP3");
+    }
+
+    function stopAllAudio(resetTime = true) {
+      Object.values(audioMap).forEach((audio) => {
+        audio.pause();
+        if (resetTime) {
+          audio.currentTime = 0;
+        }
+      });
+      activePart = null;
+      refreshButtons();
+    }
+
+    async function playPart(part) {
+      const audio = audioMap[part];
+      if (!audio) return false;
+
+      if (activePart && activePart !== part) {
+        stopAllAudio(false);
+      }
+
+      activePart = part;
+      refreshButtons();
+
+      try {
+        await audio.play();
+        setStatus(`Playing ${part.replace("part", "Part ")}... 正在播放。`);
+        refreshButtons();
+        return true;
+      } catch (error) {
+        setStatus(`Cannot play ${part.replace("part", "Part ")} MP3 now. 如果檔案還沒放入，之後加入即可。`);
+        activePart = null;
+        refreshButtons();
+        return false;
+      }
+    }
+
+    async function playAllSequentially() {
+      const token = ++playAllToken;
+      isPlayingAll = true;
+      stopAllAudio(true);
+      refreshButtons();
+
+      const order = ["part1", "part2", "part3", "part3qa"];
+
+      for (const part of order) {
+        if (token !== playAllToken || !isPlayingAll) {
+          return;
+        }
+
+        const audio = audioMap[part];
+        audio.currentTime = 0;
+        const ok = await playPart(part);
+        if (!ok) {
+          continue;
+        }
+
+        await new Promise((resolve) => {
+          const finish = () => {
+            audio.removeEventListener("ended", onEnd);
+            audio.removeEventListener("error", onError);
+            resolve();
+          };
+          const onEnd = () => finish();
+          const onError = () => {
+            setStatus(`${part.replace("part", "Part ")} MP3 無法播放，已自動跳到下一段。`);
+            finish();
+          };
+          audio.addEventListener("ended", onEnd, { once: true });
+          audio.addEventListener("error", onError, { once: true });
+        });
+      }
+
+      if (token === playAllToken) {
+        isPlayingAll = false;
+        activePart = null;
+        refreshButtons();
+        setStatus("All parts finished. 全部播放完成。");
+      }
+    }
+
+    Object.entries(audioMap).forEach(([part, audio]) => {
+      audio.addEventListener("play", () => {
+        activePart = part;
+        refreshButtons();
+      });
+
+      audio.addEventListener("pause", () => {
+        const stillPlaying = Object.values(audioMap).some((item) => !item.paused);
+        if (!stillPlaying && !isPlayingAll) {
+          activePart = null;
+        }
+        refreshButtons();
+      });
+
+      audio.addEventListener("ended", () => {
+        if (!isPlayingAll) {
+          activePart = null;
+          setStatus(`${part.replace("part", "Part ")} finished. 播放完成。`);
+        }
+        refreshButtons();
+      });
+
+      audio.addEventListener("error", () => {
+        if (!isPlayingAll) {
+          activePart = null;
+          setStatus(`${part.replace("part", "Part ")} MP3 not found or cannot load. 檔案不存在也不會卡住。`);
+        }
+        refreshButtons();
+      });
+    });
+
+    Object.entries(partButtons).forEach(([part, button]) => {
+      button.addEventListener("click", async () => {
+        const audio = audioMap[part];
+        const isCurrent = activePart === part && !audio.paused;
+
+        isPlayingAll = false;
+        playAllToken++;
+
+        if (isCurrent) {
+          audio.pause();
+          audio.currentTime = 0;
+          activePart = null;
+          setStatus(`${part.replace("part", "Part ")} stopped. 已停止播放。`);
+          refreshButtons();
+          return;
+        }
+
+        stopAllAudio(true);
+        audio.currentTime = 0;
+        await playPart(part);
+      });
+    });
+
+    playAllButton.addEventListener("click", async () => {
+      if (isPlayingAll) {
+        isPlayingAll = false;
+        playAllToken++;
+        stopAllAudio(true);
+        setStatus("Stopped all audio. 已停止全部播放。");
+        refreshButtons();
+        return;
+      }
+
+      setStatus("Starting all audio... 正在依序播放 Part 1、Part 2、Part 3。");
+      await playAllSequentially();
+    });
+
+    refreshButtons();
+  </script>
+</body>
+</html>
